@@ -1,0 +1,17 @@
+.uploader{
+  border: 2px dashed #dee5e7;
+  background-color: #fff;
+  color: #58666e;
+  text-align: center;
+  padding: 30px;
+}
+
+.uploader.is-dragging{
+  border-color: limegreen;
+}
+
+.uploader.is-disabled{
+  border-color: #acacac;
+  background: #F2F2F2;
+  opacity: 0.3;
+}

@@ -4,6 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'ember-dropbox-example',
     environment: environment,
+    firebase: 'http://ember-dropbox-test.firebaseio.com/',
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {
@@ -11,6 +12,16 @@ module.exports = function(environment) {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
       }
+    },
+
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' api.dropbox.com ember-dropbox-test.firebaseio.com https://s-dal5-nss-30.firebaseio.com/",
+      'font-src': "'self' data: use.typekit.net",
+      'connect-src': "'self' localhost:* api.dropbox.com s-dal5-nss-30.firebaseio.com wss://s-dal5-nss-30.firebaseio.com/ https://content.dropboxapi.com",
+      'img-src': "'self' www.facebook.com p.typekit.net *.gravatar.com data: localhost:*",
+      'style-src': "'self' 'unsafe-inline' use.typekit.net",
+      'frame-src': "s-static.ak.facebook.com static.ak.facebook.com www.facebook.com https://s-dal5-nss-30.firebaseio.com/"
     },
 
     APP: {

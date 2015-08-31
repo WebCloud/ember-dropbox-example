@@ -8,22 +8,22 @@ export default Ember.Component.extend({
   'data-uploader': 'true',
   isDisabled: false,
 
-  dragOver: function(event){
+  dragOver(event){
     // this is needed to avoid the default behaviour from the browser
     event.preventDefault();
   },
 
-  dragEnter: function(event){
+  dragEnter(event){
     event.preventDefault();
     this.set('isDragging', true);
   },
 
-  dragLeave: function(event){
+  dragLeave(event){
     event.preventDefault();
     this.set('isDragging', false);
   },
 
-  drop: function(event){
+  drop(event){
     var file;
 
     if(!this.get('isDisabled')){
@@ -43,6 +43,7 @@ export default Ember.Component.extend({
     var $inputField,
         _this,
         file;
+
     if(target.tagName.toLocaleLowerCase() === 'input'){
       return;
     }
@@ -51,25 +52,27 @@ export default Ember.Component.extend({
     _this = this;
 
     $inputField[0].click();
-    $inputField.on('change', (ev)=>{
-      ev.preventDefault();
-      ev.stopPropagation();
+    $inputField.on('change', ({preventDefault, stopPropagation})=>{
+      preventDefault();
+      stopPropagation();
       file = $inputField[0].files[0];
       _this.sendAction('fileInputChanged', file);
+
       return false;
     });
   },
 
-  didInsertElement: function(){
+  didInsertElement(){
     var _this = this;
 
-    this.$().on('uploadProgress', function({progress}){
+    this.$().on('uploadProgress', ({progress})=>{
       if(progress === 1){
         _this.set('isDisabled', false);
         _this.$('.progress').css({width: `${0}%`});
       } else {
         _this.$('.progress').css({width: `${progress*100}%`});
       }
+
       _this.sendAction('uploadProgress', progress);
     });
   }

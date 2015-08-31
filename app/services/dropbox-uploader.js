@@ -8,7 +8,7 @@ export default Ember.Service.extend({
         promise;
 
     _this = this;
-    promise = new Ember.RSVP.Promise(function(resolve, reject) {
+    promise = new Ember.RSVP.Promise((resolve, reject)=> {
       var reader = new FileReader();
       reader.readAsArrayBuffer(file);
 
@@ -30,8 +30,8 @@ export default Ember.Service.extend({
           success: ({path, size})=> {
             resolve({
               name: file.name,
-              path: path,
-              size: size,
+              path,
+              size,
               type: file.type
             });
           },
@@ -43,9 +43,10 @@ export default Ember.Service.extend({
           xhr: ()=>{
             var xhr = new window.XMLHttpRequest();
             //Upload progress
-            xhr.upload.addEventListener("progress", (evt)=>{
-              if (evt.lengthComputable){
-                var percentComplete = evt.loaded / evt.total;
+            xhr.upload.addEventListener("progress", ({lengthComputable, loaded, total})=>{
+              if (lengthComputable){
+                var percentComplete = loaded / total;
+
                 Ember.$('[data-uploader]').trigger({
                   type:"uploadProgress",
                   progress:percentComplete
@@ -67,7 +68,7 @@ export default Ember.Service.extend({
         _this;
 
     _this = this;
-    promise = new Ember.RSVP.Promise(function(resolve, reject) {
+    promise = new Ember.RSVP.Promise((resolve, reject)=> {
       var xhr = new XMLHttpRequest();
 
       xhr.open("GET", `https://content.dropboxapi.com/1/files/auto${file.get('path')}?access_token=${_this.get('accessToken')}`, true);

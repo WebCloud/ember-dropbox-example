@@ -34,6 +34,7 @@ export default Ember.Controller.extend({
             });
             asset.save();
             _this.get('assets').pushObject(asset);
+            _this.set('isDownloading', false);
           },
 
           xhr: ()=>{
@@ -48,16 +49,6 @@ export default Ember.Controller.extend({
                 });
               }
             }, false);
-            //Download progress
-            xhr.addEventListener("progress", (evt)=>{
-              if (evt.lengthComputable){
-                var percentComplete = evt.loaded / evt.total;
-                Ember.$('[data-uploader]').trigger({
-                  type:"downloadProgress",
-                  progress:percentComplete
-                });
-              }
-            }, false);
             return xhr;
           }
         });
@@ -65,13 +56,7 @@ export default Ember.Controller.extend({
     },
 
     uploadProgress(progress){
-      this.set('assets.lastObject.progress', progress);
-    },
-
-    downloadProgress(progress){
       if(progress === 1) {
-        this.set('isDownloading', false);
-      } else if(!this.get('isDownloading')) {
         this.set('isDownloading', true);
       }
     },

@@ -65,18 +65,12 @@ export default Ember.Component.extend({
 
     this.$().on('uploadProgress', function({progress}){
       if(progress === 1){
+        _this.set('isDisabled', false);
         _this.$('.progress').css({width: `${0}%`});
       } else {
         _this.$('.progress').css({width: `${progress*100}%`});
       }
-      // _this.sendAction('uploadProgress', progress);
-    });
-
-    this.$().on('downloadProgress', function({progress}){
-      if(progress === 1){
-        _this.set('isDisabled', false);
-      }
-      _this.sendAction('downloadProgress', progress);
+      _this.sendAction('uploadProgress', progress);
     });
   }
 });

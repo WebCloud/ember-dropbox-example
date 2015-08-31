@@ -1,5 +1,10 @@
-{{model.accessToken}}
-<br>
-{{model.user.name}}
+<h1>Hello, {{model.user.name}}<br></h1>
 
 {{file-uploader isDisabled=uploadDisabled fileInputChanged="receiveFile" uploadCompleted="viewFile" uploadProgress="uploadProgress" }}
+<br>
+{{#if isDownloading}}
+  <b>loading...</b>
+{{/if}}
+{{#each assets as |file|}}
+<b {{action 'downloadFile' file}} class="asset">{{file.path}}</b><br>
+{{/each}}

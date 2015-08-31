@@ -39,18 +39,44 @@ export default Ember.Component.extend({
     }
   },
 
+  click({target}){
+    var $inputField,
+        _this,
+        file;
+    if(target.tagName.toLocaleLowerCase() === 'input'){
+      return;
+    }
+
+    $inputField = this.$('input');
+    _this = this;
+
+    $inputField[0].click();
+    $inputField.on('change', (ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      file = $inputField[0].files[0];
+      _this.sendAction('fileInputChanged', file);
+      return false;
+    });
+  },
+
   didInsertElement: function(){
     var _this = this;
 
-    this.$().on('uploadProgress', function(evt){
-      if(evt.progress === 1){
-        _this.set('isDisabled', false);
+    this.$().on('uploadProgress', function({progress}){
+      if(progress === 1){
+        _this.$('.progress').css({width: `${0}%`});
+      } else {
+        _this.$('.progress').css({width: `${progress*100}%`});
       }
-      _this.sendAction('uploadProgress', evt.progress);
+      // _this.sendAction('uploadProgress', progress);
     });
 
-    // this.$().on('downloadProgress', function(evt){
-    //   console.info('progress', evt.progress);
-    // });
+    this.$().on('downloadProgress', function({progress}){
+      if(progress === 1){
+        _this.set('isDisabled', false);
+      }
+      _this.sendAction('downloadProgress', progress);
+    });
   }
 });

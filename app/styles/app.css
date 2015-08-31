@@ -4,6 +4,8 @@
   color: #58666e;
   text-align: center;
   padding: 30px;
+  cursor: pointer;
+  position: relative;
 }
 
 .uploader.is-dragging{
@@ -14,4 +16,23 @@
   border-color: #acacac;
   background: #F2F2F2;
   opacity: 0.3;
+}
+
+.uploader p {
+  margin: 0;
+}
+
+.uploader .progress {
+  display: block;
+  background-color: rgba(172, 234, 216, 0.73);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+}
+
+.asset {
+  cursor: pointer;
+  display: block;
 }

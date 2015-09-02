@@ -1,21 +1,15 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  utils: Ember.inject.service('dropbox-utils'),
+
   model() {
     var params,
         credential,
         _this;
 
-    params = {};
+    params = this.get('utils').getAuthorisationData();
     _this = this;
-
-    window.location.hash.replace('#', '').split('&').forEach((item)=>{
-      var parsed = item.split('=');
-      params[parsed[0].camelize()] = parsed[1];
-    });
-
-    params.authMethod = "dropbox";
-    params.userId = params.uid;
 
     return this.store.query('credential', {
                                             orderBy: 'userId',
@@ -39,12 +33,10 @@ export default Ember.Route.extend({
       if(Ember.isPresent(user)) {
         model.set('user', user);
       } else {
-        Ember.$.ajax({
-          url: `https://api.dropbox.com/1/account/info?access_token=${model.get('accessToken')}`,
-          dataType: 'json'
-        }).done(({display_name, email})=>{
-          var user = {name: display_name, email: email};
-          _this.store.createRecord('user', user).save().then((user)=>{
+        this.get('utils').getUserInfo(model.get('accessToken'))
+                         .then(({display_name:name, email})=>{
+
+          _this.store.createRecord('user', {name, email}).save().then((user)=>{
             model.set('user', user);
             model.save();
           });

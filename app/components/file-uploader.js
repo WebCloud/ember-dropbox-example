@@ -41,7 +41,6 @@ export default Ember.Component.extend({
 
   click({target}){
     var $inputField,
-        _this,
         file;
 
     if(target.tagName.toLocaleLowerCase() === 'input'){
@@ -49,31 +48,28 @@ export default Ember.Component.extend({
     }
 
     $inputField = this.$('input');
-    _this = this;
 
     $inputField[0].click();
     $inputField.on('change', ({preventDefault, stopPropagation})=>{
       preventDefault();
       stopPropagation();
       file = $inputField[0].files[0];
-      _this.sendAction('fileInputChanged', file);
+      this.sendAction('fileInputChanged', file);
 
       return false;
     });
   },
 
   didInsertElement(){
-    var _this = this;
-
     this.$().on('uploadProgress', ({progress})=>{
       if(progress === 1){
-        _this.set('isDisabled', false);
-        _this.$('.progress').css({width: `${0}%`});
+        this.set('isDisabled', false);
+        this.$('.progress').css({width: `${0}%`});
       } else {
-        _this.$('.progress').css({width: `${progress*100}%`});
+        this.$('.progress').css({width: `${progress*100}%`});
       }
 
-      _this.sendAction('uploadProgress', progress);
+      this.sendAction('uploadProgress', progress);
     });
   }
 });

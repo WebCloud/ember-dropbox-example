@@ -5,11 +5,9 @@ export default Ember.Route.extend({
 
   model() {
     var params,
-        credential,
-        _this;
+        credential;
 
     params = this.get('utils').getAuthorisationData();
-    _this = this;
 
     return this.store.query('credential', {
                                             orderBy: 'userId',
@@ -18,7 +16,7 @@ export default Ember.Route.extend({
       if(Ember.isPresent(cred)) {
         return cred.get('firstObject');
       } else {
-        credential = _this.store.createRecord('credential', params);
+        credential = this.store.createRecord('credential', params);
         credential.save();
 
         return credential;
@@ -27,8 +25,6 @@ export default Ember.Route.extend({
   },
 
   afterModel(model) {
-    var _this = this;
-
     model.get('user').then((user)=>{
       if(Ember.isPresent(user)) {
         model.set('user', user);
@@ -36,7 +32,7 @@ export default Ember.Route.extend({
         this.get('utils').getUserInfo(model.get('accessToken'))
                          .then(({display_name:name, email})=>{
 
-          _this.store.createRecord('user', {name, email}).save().then((user)=>{
+          this.store.createRecord('user', {name, email}).save().then((user)=>{
             model.set('user', user);
             model.save();
           });

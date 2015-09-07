@@ -10,15 +10,14 @@ export default Ember.Controller.extend({
 
   actions:{
     receiveFile(file){
-      var _this = this;
       this.set('uploadDisabled', true);
 
       this.get('uploader').upload(file).then((file)=>{
-        var asset = _this.store.createRecord('asset', file);
+        var asset = this.store.createRecord('asset', file);
         asset.save();
 
-        _this.get('assets').pushObject(asset);
-        _this.set('isDownloading', false);
+        this.get('assets').pushObject(asset);
+        this.set('isDownloading', false);
       });
 
     },

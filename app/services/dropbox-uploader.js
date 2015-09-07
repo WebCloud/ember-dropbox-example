@@ -4,10 +4,8 @@ export default Ember.Service.extend({
   accessToken: '',
 
   upload(file){
-    var _this,
-        promise;
+    var promise;
 
-    _this = this;
     promise = new Ember.RSVP.Promise((resolve, reject)=> {
       var reader = new FileReader();
       reader.readAsArrayBuffer(file);
@@ -15,7 +13,7 @@ export default Ember.Service.extend({
       reader.onload = ({target:{result}})=> {
         Ember.$.ajax({
           headers: {
-            Authorization: `Bearer ${_this.get('accessToken')}`
+            Authorization: `Bearer ${this.get('accessToken')}`
           },
 
           url: `https://content.dropboxapi.com/1/files_put/auto/${file.name}`,
@@ -64,14 +62,12 @@ export default Ember.Service.extend({
   },
 
   download(file){
-    var promise,
-        _this;
+    var promise;
 
-    _this = this;
     promise = new Ember.RSVP.Promise((resolve, reject)=> {
       var xhr = new XMLHttpRequest();
 
-      xhr.open("GET", `https://content.dropboxapi.com/1/files/auto${file.get('path')}?access_token=${_this.get('accessToken')}`, true);
+      xhr.open("GET", `https://content.dropboxapi.com/1/files/auto${file.get('path')}?access_token=${this.get('accessToken')}`, true);
       xhr.responseType = "arraybuffer";
       xhr.onload = ()=> {
         var blob = new Blob([xhr.response], {type: file.get('type')});
